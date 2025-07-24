@@ -1,7 +1,9 @@
 package com.assesment.maybank.spring_be.service;
 
-import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.assesment.maybank.spring_be.dto.FollowerDto;
 
@@ -10,7 +12,7 @@ public interface FollowService {
 
     void unfollow(UUID followerId, UUID followeeId);
 
-    List<FollowerDto> getFollowers(UUID followeeId);
+    Page<FollowerDto> getFollowers(UUID followeeId, Pageable pageable);
 
-    List<FollowerDto> getFollowees(UUID followerId);
+    Page<FollowerDto> getFollowees(UUID followerId, Pageable pageable);
 }

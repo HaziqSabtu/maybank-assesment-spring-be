@@ -5,10 +5,13 @@ import com.assesment.maybank.spring_be.dto.UserDto;
 import com.assesment.maybank.spring_be.service.FollowService;
 import com.assesment.maybank.spring_be.service.UserService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,12 +28,14 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/followers")
-    public ResponseEntity<List<FollowerDto>> getFollowers(@PathVariable("userId") UUID userId) {
-        return ResponseEntity.ok(followService.getFollowers(userId));
+    public ResponseEntity<Page<FollowerDto>> getFollowers(@PathVariable("userId") UUID userId,
+            @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(followService.getFollowers(userId, pageable));
     }
 
     @GetMapping("/{userId}/followees")
-    public ResponseEntity<List<FollowerDto>> getFollowees(@PathVariable("userId") UUID userId) {
-        return ResponseEntity.ok(followService.getFollowees(userId));
+    public ResponseEntity<Page<FollowerDto>> getFollowees(@PathVariable("userId") UUID userId,
+            @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(followService.getFollowees(userId, pageable));
     }
 }
