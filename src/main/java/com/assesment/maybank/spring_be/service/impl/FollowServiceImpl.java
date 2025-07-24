@@ -1,5 +1,6 @@
 package com.assesment.maybank.spring_be.service.impl;
 
+import com.assesment.maybank.spring_be.dto.FollowStatusDto;
 import com.assesment.maybank.spring_be.dto.FollowerDto;
 import com.assesment.maybank.spring_be.entity.*;
 import com.assesment.maybank.spring_be.exception.UserNotFoundException;
@@ -14,10 +15,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FollowServiceImpl implements FollowService {
 
@@ -25,7 +28,7 @@ public class FollowServiceImpl implements FollowService {
     private final UserRepository userRepository;
 
     @Override
-    public void follow(UUID followerId, UUID followeeId) {
+    public FollowStatusDto follow(UUID followerId, UUID followeeId) {
         if (followerId.equals(followeeId)) {
             throw new IllegalArgumentException("Users cannot follow themselves.");
         }
@@ -33,25 +36,55 @@ public class FollowServiceImpl implements FollowService {
         User follower = userRepository.findById(followerId)
                 .orElseThrow(() -> new UserNotFoundException("Follower not found with id: " + followerId));
         User followee = userRepository.findById(followeeId)
-                .orElseThrow(() -> new IllegalArgumentException("Followee not found with id: " + followeeId));
+                .orElseThrow(() -> new UserNotFoundException("Followee not found with id: " + followeeId));
 
-        if (followRepository.existsByFollowerAndFollowee(follower, followee))
-            return;
+        if (!followRepository.existsByFollowerAndFollowee(follower, followee)) {
 
-        Follow follow = Follow.builder().id(new FollowId(followerId, followeeId)).follower(follower).followee(followee)
-                .build();
+            FollowId followId = new FollowId(followerId, followeeId);
+            Follow follow = Follow.builder().id(followId).follower(follower).followee(followee).build();
 
-        followRepository.save(follow);
+            followRepository.save(follow);
+        }
+
+        return new FollowStatusDto(followerId, followeeId, true);
+
     }
 
     @Override
-    public void unfollow(UUID followerId, UUID followeeId) {
+    public FollowStatusDto unfollow(UUID followerId, UUID followeeId) {
+
+        if (followerId.equals(followeeId)) {
+            throw new IllegalArgumentException("Users cannot follow themselves.");
+        }
+
         User follower = userRepository.findById(followerId)
                 .orElseThrow(() -> new UserNotFoundException("Follower not found with id: " + followerId));
         User followee = userRepository.findById(followeeId)
                 .orElseThrow(() -> new UserNotFoundException("Followee not found with id: " + followeeId));
 
-        followRepository.deleteByFollowerAndFollowee(follower, followee);
+        if (followRepository.existsByFollowerAndFollowee(follower, followee)) {
+            followRepository.deleteByFollowerAndFollowee(follower, followee);
+        }
+
+        return new FollowStatusDto(followerId, followeeId, false);
+    }
+
+    @Override
+    public FollowStatusDto getFollowStatus(UUID followerId, UUID followeeId) {
+
+        if (followerId.equals(followeeId)) {
+            throw new IllegalArgumentException("Users cannot follow themselves.");
+        }
+
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new UserNotFoundException("Follower not found with id: " + followerId));
+        User followee = userRepository.findById(followeeId)
+                .orElseThrow(() -> new UserNotFoundException("Followee not found with id: " + followeeId));
+
+        boolean following = followRepository.existsByFollowerAndFollowee(follower, followee);
+
+        return new FollowStatusDto(followerId, followeeId, following);
+
     }
 
     @Override
