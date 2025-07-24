@@ -35,7 +35,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("userId") UUID userId) {
-        return userService.getUserById(userId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(userService.getUserById(userId));
     }
 
     @GetMapping("/{userId}/followers")

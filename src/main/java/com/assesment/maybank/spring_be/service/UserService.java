@@ -10,5 +10,5 @@ public interface UserService {
 
     UserDto createUser(UserCreateRequest request);
 
-    Optional<UserDto> getUserById(UUID userId);
+    UserDto getUserById(UUID userId);
 }
