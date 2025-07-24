@@ -3,6 +3,7 @@ package com.assesment.maybank.spring_be.controller;
 import com.assesment.maybank.spring_be.dto.FollowRequest;
 import com.assesment.maybank.spring_be.dto.FollowStatusDto;
 import com.assesment.maybank.spring_be.dto.FollowerDto;
+import com.assesment.maybank.spring_be.dto.UserCreateRequest;
 import com.assesment.maybank.spring_be.dto.UserDto;
 import com.assesment.maybank.spring_be.service.FollowService;
 import com.assesment.maybank.spring_be.service.UserService;
@@ -26,6 +27,11 @@ public class UserController {
 
     private final UserService userService;
     private final FollowService followService;
+
+    @PostMapping
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserCreateRequest request) {
+        return ResponseEntity.ok(userService.createUser(request));
+    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("userId") UUID userId) {

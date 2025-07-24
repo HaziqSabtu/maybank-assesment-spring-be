@@ -1,5 +1,6 @@
 package com.assesment.maybank.spring_be.service.impl;
 
+import com.assesment.maybank.spring_be.dto.UserCreateRequest;
 import com.assesment.maybank.spring_be.dto.UserDto;
 import com.assesment.maybank.spring_be.entity.User;
 import com.assesment.maybank.spring_be.repository.UserRepository;
@@ -15,6 +16,13 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    @Override
+    public UserDto createUser(UserCreateRequest request) {
+        User user = User.builder().username(request.getUsername()).build();
+        userRepository.save(user);
+        return toDto(user);
+    }
 
     @Override
     public Optional<UserDto> getUserById(UUID userId) {
