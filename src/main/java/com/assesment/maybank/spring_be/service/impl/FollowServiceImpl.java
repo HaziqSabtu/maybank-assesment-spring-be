@@ -2,6 +2,7 @@ package com.assesment.maybank.spring_be.service.impl;
 
 import com.assesment.maybank.spring_be.dto.FollowerDto;
 import com.assesment.maybank.spring_be.entity.*;
+import com.assesment.maybank.spring_be.exception.UserNotFoundException;
 import com.assesment.maybank.spring_be.projection.FollowerProjection;
 import com.assesment.maybank.spring_be.repository.FollowRepository;
 import com.assesment.maybank.spring_be.repository.UserRepository;
@@ -30,9 +31,9 @@ public class FollowServiceImpl implements FollowService {
         }
 
         User follower = userRepository.findById(followerId)
-                .orElseThrow(() -> new IllegalArgumentException("Follower not found"));
+                .orElseThrow(() -> new UserNotFoundException("Follower not found with id: " + followerId));
         User followee = userRepository.findById(followeeId)
-                .orElseThrow(() -> new IllegalArgumentException("Followee not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Followee not found with id: " + followeeId));
 
         if (followRepository.existsByFollowerAndFollowee(follower, followee))
             return;
@@ -46,16 +47,16 @@ public class FollowServiceImpl implements FollowService {
     @Override
     public void unfollow(UUID followerId, UUID followeeId) {
         User follower = userRepository.findById(followerId)
-                .orElseThrow(() -> new IllegalArgumentException("Follower not found"));
+                .orElseThrow(() -> new UserNotFoundException("Follower not found with id: " + followerId));
         User followee = userRepository.findById(followeeId)
-                .orElseThrow(() -> new IllegalArgumentException("Followee not found"));
+                .orElseThrow(() -> new UserNotFoundException("Followee not found with id: " + followeeId));
 
         followRepository.deleteByFollowerAndFollowee(follower, followee);
     }
 
     @Override
     public Page<FollowerDto> getFollowers(UUID followeeId, Pageable pageable) {
-        userRepository.findById(followeeId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        userRepository.findById(followeeId).orElseThrow(() -> new UserNotFoundException(followeeId));
 
         Pageable safeSort = PageableUtils.enforceStableSort(pageable, "f.followedAt", "u.id");
 
@@ -66,7 +67,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public Page<FollowerDto> getFollowees(UUID followerId, Pageable pageable) {
-        userRepository.findById(followerId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        userRepository.findById(followerId).orElseThrow(() -> new UserNotFoundException(followerId));
 
         Pageable safeSort = PageableUtils.enforceStableSort(pageable, "f.followedAt", "u.id");
 
