@@ -39,7 +39,11 @@ public class UserServiceImpl implements UserService {
 
         CountryCode countryCode = CountryCode.fromCode(request.getCountryCode());
 
-        User user = User.builder().username(request.getUsername()).countryCode(countryCode.getCode()).build();
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(request.getPassword())
+                .countryCode(countryCode.getCode())
+                .build();
         userRepository.save(user);
 
         int followerCount = 0;
@@ -82,13 +86,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
-
-        int followerCount = followRepository.countFollowersByFolloweeId(user.getId());
-        int followingCount = followRepository.countFolloweesByFollowerId(user.getId());
-
-        return toDto(user, followerCount, followingCount);
+    public User getUserEntityByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 
 }

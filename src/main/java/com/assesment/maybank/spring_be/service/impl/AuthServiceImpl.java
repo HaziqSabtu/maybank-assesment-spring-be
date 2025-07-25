@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.assesment.maybank.spring_be.dto.LoginDto;
 import com.assesment.maybank.spring_be.dto.LoginRequest;
 import com.assesment.maybank.spring_be.dto.RegisterRequest;
-import com.assesment.maybank.spring_be.dto.UserDto;
+import com.assesment.maybank.spring_be.entity.User;
 import com.assesment.maybank.spring_be.exception.LoginFailedException;
 import com.assesment.maybank.spring_be.exception.UserNotFoundException;
 import com.assesment.maybank.spring_be.service.AuthService;
@@ -27,15 +27,20 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginDto login(LoginRequest request) {
 
-        UserDto user;
+        User user;
         try {
-            user = userService.getUserByUsername(request.getUsername());
+            user = userService.getUserEntityByUsername(request.getUsername());
         } catch (UserNotFoundException e) {
             throw new LoginFailedException();
         }
 
-        UUID userId = user.id();
-        String username = user.username();
+        UUID userId = user.getId();
+        String username = user.getUsername();
+        String password = user.getPassword();
+
+        if (!password.equals(request.getPassword())) {
+            throw new LoginFailedException();
+        }
 
         String token = jwtUtil.generateToken(userId);
 

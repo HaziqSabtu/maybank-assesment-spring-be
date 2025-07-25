@@ -22,6 +22,9 @@ public class User {
     @Column(nullable = false, length = 255)
     private String username;
 
+    @Column(nullable = false, length = 20)
+    private String password;
+
     @Column(columnDefinition = "datetimeoffset")
     private OffsetDateTime createdAt;
 
