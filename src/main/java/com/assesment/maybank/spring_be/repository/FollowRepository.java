@@ -39,4 +39,8 @@ public interface FollowRepository extends JpaRepository<Follow, FollowId> {
     Page<FollowerProjection> findFollowerProjectionsByFollowerId(@Param("followerId") UUID followerId,
             Pageable pageable);
 
+    int countFollowersByFolloweeId(UUID followeeId);
+
+    int countFolloweesByFollowerId(UUID followerId);
+
 }

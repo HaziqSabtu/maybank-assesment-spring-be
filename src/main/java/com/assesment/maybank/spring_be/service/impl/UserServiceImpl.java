@@ -9,6 +9,7 @@ import com.assesment.maybank.spring_be.dto.WeatherDto;
 import com.assesment.maybank.spring_be.entity.User;
 import com.assesment.maybank.spring_be.enums.CountryCode;
 import com.assesment.maybank.spring_be.exception.UserNotFoundException;
+import com.assesment.maybank.spring_be.repository.FollowRepository;
 import com.assesment.maybank.spring_be.repository.UserRepository;
 import com.assesment.maybank.spring_be.service.CountryService;
 import com.assesment.maybank.spring_be.service.ExchangeRateService;
@@ -28,6 +29,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
     private final CountryService countryService;
     private final WeatherService weatherService;
     private final ExchangeRateService exchangeRateService;
@@ -49,9 +51,8 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
-        // TODO: Add follower and following counts
-        int followerCount = 0;
-        int followingCount = 0;
+        int followerCount = followRepository.countFollowersByFolloweeId(userId);
+        int followingCount = followRepository.countFolloweesByFollowerId(userId);
 
         return toDto(user, followerCount, followingCount);
     }
@@ -84,9 +85,8 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
 
-        // TODO: Add follower and following counts
-        int followerCount = 0;
-        int followingCount = 0;
+        int followerCount = followRepository.countFollowersByFolloweeId(user.getId());
+        int followingCount = followRepository.countFolloweesByFollowerId(user.getId());
 
         return toDto(user, followerCount, followingCount);
     }
