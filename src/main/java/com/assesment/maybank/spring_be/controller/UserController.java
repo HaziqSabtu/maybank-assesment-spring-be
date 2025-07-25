@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -58,8 +60,8 @@ public class UserController {
     @PostMapping("/follow")
     public ResponseEntity<FollowStatusDto> follow(@RequestBody @Valid FollowRequest data) {
 
-        // TODO: Do authentication
-        UUID followerId = UUID.fromString("6285A781-2AA0-46FF-914A-18703F52DA17");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID followerId = (UUID) authentication.getPrincipal();
         UUID followeeId = data.getUserId();
 
         return ResponseEntity.ok(followService.follow(followerId, followeeId));
@@ -68,8 +70,8 @@ public class UserController {
     @DeleteMapping("/follow")
     public ResponseEntity<FollowStatusDto> unfollow(@RequestBody @Valid FollowRequest data) {
 
-        // TODO: Do authentication
-        UUID followerId = UUID.fromString("6285A781-2AA0-46FF-914A-18703F52DA17");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID followerId = (UUID) authentication.getPrincipal();
         UUID followeeId = data.getUserId();
 
         return ResponseEntity.ok(followService.unfollow(followerId, followeeId));
