@@ -1,12 +1,22 @@
 package com.assesment.maybank.spring_be.service.impl;
 
+import com.assesment.maybank.spring_be.dto.CountryDto;
+import com.assesment.maybank.spring_be.dto.ExchangeRateDto;
 import com.assesment.maybank.spring_be.dto.UserCreateRequest;
 import com.assesment.maybank.spring_be.dto.UserDto;
+import com.assesment.maybank.spring_be.dto.UserSummaryDto;
+import com.assesment.maybank.spring_be.dto.WeatherDto;
 import com.assesment.maybank.spring_be.entity.User;
+import com.assesment.maybank.spring_be.enums.CountryCode;
 import com.assesment.maybank.spring_be.exception.UserNotFoundException;
 import com.assesment.maybank.spring_be.repository.UserRepository;
+import com.assesment.maybank.spring_be.service.CountryService;
+import com.assesment.maybank.spring_be.service.ExchangeRateService;
 import com.assesment.maybank.spring_be.service.UserService;
+import com.assesment.maybank.spring_be.service.WeatherService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +28,9 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final CountryService countryService;
+    private final WeatherService weatherService;
+    private final ExchangeRateService exchangeRateService;
 
     @Override
     public UserDto createUser(UserCreateRequest request) {
@@ -41,6 +54,26 @@ public class UserServiceImpl implements UserService {
 
     private UserDto toDto(User user, int followerCount, int followingCount) {
         return new UserDto(user.getId(), user.getUsername(), followerCount, followingCount);
+    }
+
+    @Override
+    public UserSummaryDto getUserSummary(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+
+        CountryCode countryCode = CountryCode.fromCode(user.getCountryCode());
+
+        if (countryCode.equals(CountryCode.UNSUPPORTED)) {
+            return new UserSummaryDto(null, null, null);
+        }
+
+        CountryDto country = countryService.getCountryByCode(countryCode.getCode());
+
+        double lat = country.latitude();
+        double lon = country.longitude();
+
+        WeatherDto weather = weatherService.getWeatherByLatitudeLongitude(lat, lon);
+        ExchangeRateDto exchangeRate = exchangeRateService.getExchangeRateToUsdByCountry(countryCode.getCurrencyCode());
+        return new UserSummaryDto(country, weather, exchangeRate);
     }
 
 }

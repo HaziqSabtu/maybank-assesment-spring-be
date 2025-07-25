@@ -28,6 +28,9 @@ public class User {
     @Column(columnDefinition = "datetimeoffset")
     private OffsetDateTime updatedAt;
 
+    @Column(nullable = false, length = 2)
+    private String countryCode;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = OffsetDateTime.now();

@@ -5,6 +5,7 @@ import com.assesment.maybank.spring_be.dto.FollowStatusDto;
 import com.assesment.maybank.spring_be.dto.FollowerDto;
 import com.assesment.maybank.spring_be.dto.UserCreateRequest;
 import com.assesment.maybank.spring_be.dto.UserDto;
+import com.assesment.maybank.spring_be.dto.UserSummaryDto;
 import com.assesment.maybank.spring_be.service.FollowService;
 import com.assesment.maybank.spring_be.service.UserService;
 
@@ -18,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/users")
@@ -36,6 +36,11 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("userId") UUID userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
+    }
+
+    @GetMapping("/{userId}/summary")
+    public ResponseEntity<UserSummaryDto> getUserSummary(@PathVariable("userId") UUID userId) {
+        return ResponseEntity.ok(userService.getUserSummary(userId));
     }
 
     @GetMapping("/{userId}/followers")

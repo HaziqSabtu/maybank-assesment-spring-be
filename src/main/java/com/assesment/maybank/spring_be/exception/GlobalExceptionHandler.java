@@ -49,6 +49,7 @@ public class GlobalExceptionHandler {
         int code = 5000;
         ApiErrorResponse error = new ApiErrorResponse("INTERNAL_SERVER_ERROR", ex.getMessage(), code,
                 ZonedDateTime.now());
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
