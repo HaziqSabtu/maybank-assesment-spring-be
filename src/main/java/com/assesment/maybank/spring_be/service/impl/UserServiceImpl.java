@@ -2,7 +2,7 @@ package com.assesment.maybank.spring_be.service.impl;
 
 import com.assesment.maybank.spring_be.dto.CountryDto;
 import com.assesment.maybank.spring_be.dto.ExchangeRateDto;
-import com.assesment.maybank.spring_be.dto.UserCreateRequest;
+import com.assesment.maybank.spring_be.dto.RegisterRequest;
 import com.assesment.maybank.spring_be.dto.UserDto;
 import com.assesment.maybank.spring_be.dto.UserSummaryDto;
 import com.assesment.maybank.spring_be.dto.WeatherDto;
@@ -33,8 +33,11 @@ public class UserServiceImpl implements UserService {
     private final ExchangeRateService exchangeRateService;
 
     @Override
-    public UserDto createUser(UserCreateRequest request) {
-        User user = User.builder().username(request.getUsername()).build();
+    public UserDto createUser(RegisterRequest request) {
+
+        CountryCode countryCode = CountryCode.fromCode(request.getCountryCode());
+
+        User user = User.builder().username(request.getUsername()).countryCode(countryCode.getCode()).build();
         userRepository.save(user);
 
         int followerCount = 0;
@@ -46,6 +49,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
+        // TODO: Add follower and following counts
         int followerCount = 0;
         int followingCount = 0;
 
@@ -74,6 +78,17 @@ public class UserServiceImpl implements UserService {
         WeatherDto weather = weatherService.getWeatherByLatitudeLongitude(lat, lon);
         ExchangeRateDto exchangeRate = exchangeRateService.getExchangeRateToUsdByCountry(countryCode.getCurrencyCode());
         return new UserSummaryDto(country, weather, exchangeRate);
+    }
+
+    @Override
+    public UserDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+
+        // TODO: Add follower and following counts
+        int followerCount = 0;
+        int followingCount = 0;
+
+        return toDto(user, followerCount, followingCount);
     }
 
 }
