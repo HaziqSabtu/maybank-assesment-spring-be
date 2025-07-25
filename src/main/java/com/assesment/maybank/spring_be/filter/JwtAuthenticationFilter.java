@@ -1,4 +1,4 @@
-package com.assesment.maybank.spring_be.config;
+package com.assesment.maybank.spring_be.filter;
 
 import java.io.IOException;
 import java.util.Collections;
