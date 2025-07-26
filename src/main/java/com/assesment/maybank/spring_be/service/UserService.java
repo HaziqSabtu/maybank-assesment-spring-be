@@ -17,6 +17,8 @@ public interface UserService {
 
     User getUserEntityByUsername(String username);
 
+    User getUserEntityById(UUID userId);
+
     @Nullable
     UserSummaryDto getUserSummary(UUID userId);
 }

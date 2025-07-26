@@ -19,6 +19,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(PlaceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserNotFound(PlaceNotFoundException ex) {
+        int code = 2000;
+        ApiErrorResponse error = new ApiErrorResponse("PLACE_NOT_FOUND", ex.getMessage(), code, ZonedDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidationError(MethodArgumentNotValidException ex) {
         int code = 3000;

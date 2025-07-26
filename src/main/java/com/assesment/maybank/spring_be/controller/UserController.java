@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/users")
@@ -76,5 +77,4 @@ public class UserController {
 
         return ResponseEntity.ok(followService.unfollow(followerId, followeeId));
     }
-
 }
