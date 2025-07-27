@@ -1,5 +1,6 @@
 package com.assesment.maybank.spring_be.service.impl;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -43,6 +44,7 @@ public class PlaceServiceImpl implements PlaceService {
             place.setName(request.getName());
             place.setAddress(request.getAddress());
             place.setCategory(request.getCategory());
+            place.setCreatedAt(OffsetDateTime.now());
         }
 
         place = placeRepository.save(place);
