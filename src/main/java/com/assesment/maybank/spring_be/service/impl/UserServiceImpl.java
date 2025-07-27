@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService {
                 .password(request.getPassword())
                 .countryCode(countryCode.getCode())
                 .build();
-        userRepository.save(user);
 
+        user = userRepository.save(user);
         int followerCount = 0;
         int followingCount = 0;
         return toDto(user, followerCount, followingCount);
