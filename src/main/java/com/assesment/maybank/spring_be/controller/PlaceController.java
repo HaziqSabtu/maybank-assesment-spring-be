@@ -47,7 +47,7 @@ public class PlaceController {
 
     @GetMapping
     public ResponseEntity<Page<PlaceDto>> getPlaces(
-            @PageableDefault(size = 6) Pageable pageable) {
+            @PageableDefault(size = 10) Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID userId = (UUID) authentication.getPrincipal();
         return ResponseEntity.ok(placeService.getPlaces(userId, pageable));
