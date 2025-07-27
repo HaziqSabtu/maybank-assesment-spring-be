@@ -1,0 +1,557 @@
+{
+	"info": {
+		"_postman_id": "edf62288-0829-47b9-99c4-94f09a2cf33a",
+		"name": "Maybank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32098672"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "followers",
+					"item": [
+						{
+							"name": "Get user followers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/users/:userId/followers",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"users",
+										":userId",
+										"followers"
+									],
+									"query": [
+										{
+											"key": "size",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "username,asc",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": "6285A781-2AA0-46FF-914A-18703F52DA17"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "followees",
+					"item": [
+						{
+							"name": "Get user followees",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/users/:userId/followees",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"users",
+										":userId",
+										"followees"
+									],
+									"query": [
+										{
+											"key": "size",
+											"value": "12",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "u.username,asc",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": "6285A781-2AA0-46FF-914A-18703F52DA17"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get follow status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/users/:userId/followees/:followeeId",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"users",
+										":userId",
+										"followees",
+										":followeeId"
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": "{{userId}}"
+										},
+										{
+											"key": "followeeId",
+											"value": "672156FA-AC58-4C93-BB46-253D0A65CD32"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "follow",
+					"item": [
+						{
+							"name": "Follow a user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"672156FA-AC58-4C93-BB46-253D0A65CD32\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/users/follow",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"users",
+										"follow"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unfollow a user",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"672156FA-AC58-4C93-BB46-253D0A65CD32\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/users/follow",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"users",
+										"follow"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get user by Id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{endpoint}}/users/:userId",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user summary",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{endpoint}}/users/:userId/summary",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"summary"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"userpassword123\",\r\n    \"countryCode\": \"SG\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/auth/register",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();\r",
+									"pm.environment.set(\"userId\", responseData.id);\r",
+									"pm.environment.set(\"jwt\", responseData.token);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user123\",\r\n    \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/auth/login",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "places",
+			"item": [
+				{
+					"name": "Create a place",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"1231112\",\r\n    \"name\": \"testname1212\",\r\n    \"address\": \"dummyaddress\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/places",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"places"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a place",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"ChIJm4WvuE7jAGARbdCr0f3bdcE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/places",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"places"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get places",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{endpoint}}/places",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"places"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "3",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get place by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{endpoint}}/places/:placeId",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"places",
+								":placeId"
+							],
+							"variable": [
+								{
+									"key": "placeId",
+									"value": "1231112"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "misc",
+			"item": [
+				{
+					"name": "get weather data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.open-meteo.com/v1/forecast?latitude=3.139&longitude=101.6869&current_weather=true",
+							"protocol": "https",
+							"host": [
+								"api",
+								"open-meteo",
+								"com"
+							],
+							"path": [
+								"v1",
+								"forecast"
+							],
+							"query": [
+								{
+									"key": "current",
+									"value": "temperature_2m,is_day,rain",
+									"disabled": true
+								},
+								{
+									"key": "latitude",
+									"value": "3.139"
+								},
+								{
+									"key": "longitude",
+									"value": "101.6869"
+								},
+								{
+									"key": "current_weather",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get currency data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.frankfurter.dev/v1/latest?base=MYR&symbols=USD",
+							"protocol": "https",
+							"host": [
+								"api",
+								"frankfurter",
+								"dev"
+							],
+							"path": [
+								"v1",
+								"latest"
+							],
+							"query": [
+								{
+									"key": "base",
+									"value": "MYR"
+								},
+								{
+									"key": "symbols",
+									"value": "USD"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get country data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://restcountries.com/v3.1/alpha/MY",
+							"protocol": "https",
+							"host": [
+								"restcountries",
+								"com"
+							],
+							"path": [
+								"v3.1",
+								"alpha",
+								"MY"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
