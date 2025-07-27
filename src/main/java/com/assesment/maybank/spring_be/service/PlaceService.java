@@ -5,14 +5,14 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.assesment.maybank.spring_be.dto.PlaceFavouriteCreateRequest;
-import com.assesment.maybank.spring_be.dto.PlaceFavouriteDeleteRequest;
-import com.assesment.maybank.spring_be.dto.PlaceFavouriteDto;
+import com.assesment.maybank.spring_be.dto.PlaceCreateRequest;
+import com.assesment.maybank.spring_be.dto.PlaceDeleteRequest;
+import com.assesment.maybank.spring_be.dto.PlaceDto;
 
 public interface PlaceService {
-    PlaceFavouriteDto createFavourite(PlaceFavouriteCreateRequest request, UUID userId);
+    PlaceDto createPlace(PlaceCreateRequest request, UUID userId);
 
-    void deleteFavourite(PlaceFavouriteDeleteRequest request, UUID userId);
+    void deletePlace(PlaceDeleteRequest request, UUID userId);
 
-    Page<PlaceFavouriteDto> getFavourites(UUID userId, Pageable pageable);
+    Page<PlaceDto> getPlaces(UUID userId, Pageable pageable);
 }

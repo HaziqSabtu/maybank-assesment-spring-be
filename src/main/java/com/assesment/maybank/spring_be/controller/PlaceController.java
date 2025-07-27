@@ -1,8 +1,8 @@
 package com.assesment.maybank.spring_be.controller;
 
-import com.assesment.maybank.spring_be.dto.PlaceFavouriteCreateRequest;
-import com.assesment.maybank.spring_be.dto.PlaceFavouriteDeleteRequest;
-import com.assesment.maybank.spring_be.dto.PlaceFavouriteDto;
+import com.assesment.maybank.spring_be.dto.PlaceCreateRequest;
+import com.assesment.maybank.spring_be.dto.PlaceDeleteRequest;
+import com.assesment.maybank.spring_be.dto.PlaceDto;
 import com.assesment.maybank.spring_be.service.PlaceService;
 
 import jakarta.validation.Valid;
@@ -20,37 +20,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/favourites")
+@RequestMapping("/places")
 @RequiredArgsConstructor
 public class PlaceController {
 
-    private final PlaceService placeFavouriteService;
+    private final PlaceService placeService;
 
     @PostMapping
-    public ResponseEntity<PlaceFavouriteDto> createFavourite(@RequestBody @Valid PlaceFavouriteCreateRequest data) {
+    public ResponseEntity<PlaceDto> createPlace(@RequestBody @Valid PlaceCreateRequest data) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID userId = (UUID) authentication.getPrincipal();
 
-        return ResponseEntity.ok(placeFavouriteService.createFavourite(data, userId));
+        return ResponseEntity.ok(placeService.createPlace(data, userId));
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteFavourite(@RequestBody @Valid PlaceFavouriteDeleteRequest data) {
+    public ResponseEntity<Void> deletePlace(@RequestBody @Valid PlaceDeleteRequest data) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID userId = (UUID) authentication.getPrincipal();
 
-        placeFavouriteService.deleteFavourite(data, userId);
+        placeService.deletePlace(data, userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping
-    public ResponseEntity<Page<PlaceFavouriteDto>> getFavourites(
+    public ResponseEntity<Page<PlaceDto>> getPlaces(
             @PageableDefault(size = 6) Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID userId = (UUID) authentication.getPrincipal();
-        return ResponseEntity.ok(placeFavouriteService.getFavourites(userId, pageable));
+        return ResponseEntity.ok(placeService.getPlaces(userId, pageable));
     }
 
 }

@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.assesment.maybank.spring_be.dto.PlaceFavouriteCreateRequest;
-import com.assesment.maybank.spring_be.dto.PlaceFavouriteDeleteRequest;
-import com.assesment.maybank.spring_be.dto.PlaceFavouriteDto;
+import com.assesment.maybank.spring_be.dto.PlaceCreateRequest;
+import com.assesment.maybank.spring_be.dto.PlaceDeleteRequest;
+import com.assesment.maybank.spring_be.dto.PlaceDto;
 import com.assesment.maybank.spring_be.entity.Place;
 import com.assesment.maybank.spring_be.entity.PlaceId;
 import com.assesment.maybank.spring_be.exception.PlaceNotFoundException;
@@ -27,7 +27,7 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceRepository placeRepository;
 
     @Transactional
-    public PlaceFavouriteDto createFavourite(PlaceFavouriteCreateRequest request, UUID userId) {
+    public PlaceDto createPlace(PlaceCreateRequest request, UUID userId) {
         PlaceId placeId = new PlaceId(userId, request.getId());
         Place place = placeRepository.findById(placeId)
                 .orElse(null);
@@ -47,11 +47,11 @@ public class PlaceServiceImpl implements PlaceService {
 
         place = placeRepository.save(place);
 
-        return toPlaceFavouriteDto(place);
+        return toPlaceDto(place);
     }
 
     @Override
-    public void deleteFavourite(PlaceFavouriteDeleteRequest request, UUID userId) {
+    public void deletePlace(PlaceDeleteRequest request, UUID userId) {
         PlaceId placeId = new PlaceId(userId, request.getId());
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new PlaceNotFoundException("Place not found"));
@@ -59,19 +59,19 @@ public class PlaceServiceImpl implements PlaceService {
         placeRepository.delete(place);
     }
 
-    public Page<PlaceFavouriteDto> getFavourites(UUID userId, Pageable pageable) {
+    public Page<PlaceDto> getPlaces(UUID userId, Pageable pageable) {
 
         Pageable safeSort = PageableUtils.enforceStableSort(pageable, "createdAt", "id.placeId");
 
         Page<Place> places = placeRepository.findByIdUserId(safeSort, userId);
 
-        return places.map(this::toPlaceFavouriteDto);
+        return places.map(this::toPlaceDto);
 
     }
 
-    private PlaceFavouriteDto toPlaceFavouriteDto(Place place) {
+    private PlaceDto toPlaceDto(Place place) {
 
-        return new PlaceFavouriteDto(place.getId().getPlaceId(), place.getName(), place.getAddress(),
+        return new PlaceDto(place.getId().getPlaceId(), place.getName(), place.getAddress(),
                 place.getCategory(), place.getCreatedAt());
     }
 
