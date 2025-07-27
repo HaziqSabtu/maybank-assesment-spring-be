@@ -69,6 +69,14 @@ public class PlaceServiceImpl implements PlaceService {
 
     }
 
+    @Override
+    public PlaceDto getPlace(String placeId, UUID userId) {
+        PlaceId placeIdObj = new PlaceId(userId, placeId);
+        Place place = placeRepository.findById(placeIdObj)
+                .orElseThrow(() -> new PlaceNotFoundException("Place not found"));
+        return toPlaceDto(place);
+    }
+
     private PlaceDto toPlaceDto(Place place) {
 
         return new PlaceDto(place.getId().getPlaceId(), place.getName(), place.getAddress(),

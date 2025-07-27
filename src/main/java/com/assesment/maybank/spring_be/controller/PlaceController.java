@@ -53,4 +53,11 @@ public class PlaceController {
         return ResponseEntity.ok(placeService.getPlaces(userId, pageable));
     }
 
+    @GetMapping("/{placeId}")
+    public ResponseEntity<PlaceDto> getPlace(@PathVariable String placeId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID userId = (UUID) authentication.getPrincipal();
+        return ResponseEntity.ok(placeService.getPlace(placeId, userId));
+    }
+
 }

@@ -15,4 +15,6 @@ public interface PlaceService {
     void deletePlace(PlaceDeleteRequest request, UUID userId);
 
     Page<PlaceDto> getPlaces(UUID userId, Pageable pageable);
+
+    PlaceDto getPlace(String placeId, UUID userId);
 }
