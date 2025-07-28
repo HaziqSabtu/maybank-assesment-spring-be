@@ -80,9 +80,6 @@ Ensure you have the following prerequisites installed:
 > ℹ️ You may modify the database configuration in `src/main/resources/application.properties` if your setup differs.
 
 ```bash
-# Build the project
-./gradlew build
-
 # Run the application
 ./gradlew bootRun
 ```
