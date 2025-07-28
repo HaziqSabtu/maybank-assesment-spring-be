@@ -26,6 +26,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(LoginFailedException.class)
+    public ResponseEntity<ApiErrorResponse> handleLoginFailed(LoginFailedException ex) {
+        int code = 4000;
+        ApiErrorResponse error = new ApiErrorResponse("LOGIN_FAILED", ex.getMessage(), code, ZonedDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidationError(MethodArgumentNotValidException ex) {
         int code = 3000;
